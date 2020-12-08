@@ -7,7 +7,6 @@ import (
 	"github.com/francisco-serrano/sample-gokit/service"
 	"github.com/go-kit/kit/endpoint"
 	"net/http"
-	"strings"
 )
 
 type helloRequest struct {
@@ -28,8 +27,15 @@ func MakeHelloEndpoint(svc service.HelloService) endpoint.Endpoint {
 			}, nil
 		}
 
+		msg, err := svc.Hello(req.V)
+		if err != nil {
+			return helloResponse{
+				Error: err.Error(),
+			}, nil
+		}
+
 		return helloResponse{
-			Message: svc.Hello(req.V),
+			Message: msg,
 		}, nil
 	}
 }
@@ -38,10 +44,6 @@ func DecodeHelloRequest(_ context.Context, r *http.Request) (interface{}, error)
 	var request helloRequest
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 		return nil, err
-	}
-
-	if strings.TrimSpace(request.V) == "" {
-		return nil, errors.New("value cannot be empty")
 	}
 
 	return request, nil
