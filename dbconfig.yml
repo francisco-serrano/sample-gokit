@@ -1,0 +1,4 @@
+local:
+  dialect: mysql
+  datasource: root:root@tcp(localhost:3306)/samplegokit?parseTime=true
+  dir: database/migrations
