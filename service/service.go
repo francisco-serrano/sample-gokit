@@ -10,6 +10,7 @@ type HelloService interface {
 }
 
 type helloService struct {
+
 }
 
 func NewHelloService() HelloService {
